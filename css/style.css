@@ -279,11 +279,9 @@ h2 .t{display:block}
 
 /* Celular: lectura continua y tarjetas más compactas */
 @media(max-width:767px){
-    /* Sin hojas apiladas: en pantallas chicas cada sección es más alta que la
-       pantalla y el efecto dejaba huecos y superposiciones */
-    .stack{position:relative;top:auto!important;border-radius:0}
-    .stack-hold{display:none}
-    .sheet>.stack+.stack{border-top:1px solid var(--line)}
+    /* Hojas en celular: pausa más corta entre una y otra */
+    .stack-hold{height:30vh;height:30svh}
+    .stack{border-radius:1.25rem 1.25rem 0 0}
     .section{padding-block:2.75rem}
     .cta{padding-block:3.5rem}
     .cta h2{margin-bottom:1.25rem}
