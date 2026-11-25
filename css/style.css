@@ -276,3 +276,54 @@ h2 .t{display:block}
     html{scroll-behavior:auto}
     *,*::before,*::after{animation:none!important;transition:none!important}
 }
+
+/* Celular: lectura continua y tarjetas más compactas */
+@media(max-width:767px){
+    /* Sin hojas apiladas: en pantallas chicas cada sección es más alta que la
+       pantalla y el efecto dejaba huecos y superposiciones */
+    .stack{position:relative;top:auto!important;border-radius:0}
+    .stack-hold{display:none}
+    .sheet>.stack+.stack{border-top:1px solid var(--line)}
+    .section{padding-block:2.75rem}
+    .cta{padding-block:3.5rem}
+    .cta h2{margin-bottom:1.25rem}
+    .cta-text{margin-bottom:1.75rem;font-size:.9375rem;line-height:1.7}
+    .cta-contact{margin-top:2rem;padding-top:1.5rem}
+
+    .header-logo img{height:42px}
+    .hero-actions .btn{flex:1 1 100%}
+
+    /* Tarjetas: foto más baja (recorta solo madera de arriba y abajo) */
+    .products{gap:.625rem}
+    .product-photo{aspect-ratio:4/5;margin:.375rem .375rem 0}
+    .product-photo img{object-position:50% 40%}
+    .product-name{padding:2.5rem .7rem .7rem;font-size:clamp(1.05rem,12cqi,1.5rem)}
+    .product-text{padding:.7rem}
+    .product-desc{font-size:.75rem;line-height:1.5}
+    .product-link{min-height:2.5rem;margin-top:.6rem;font-size:.875rem}
+    .product-tag{top:.375rem;left:.375rem}
+
+    /* Si la última tarjeta queda sola, ocupa el ancho completo en horizontal */
+    .products .product:last-child:nth-child(odd){grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto 1fr}
+    .products .product:last-child:nth-child(odd) .product-media{grid-column:1;grid-row:1/3;padding-bottom:.375rem}
+    .products .product:last-child:nth-child(odd) .product-text{grid-column:2;padding-top:.85rem}
+    .products-three .product:last-child .product-media{padding-bottom:.375rem}
+
+    .variety-list .product-photo{aspect-ratio:3/4}
+    .variety-text{padding:1.1rem}
+
+    .about{gap:2rem}
+    .about-photo{padding:.5rem}
+    .about-photo img{aspect-ratio:4/3}
+    .about-copy p{font-size:.9rem;line-height:1.7}
+    .facts dd{font-size:1.75rem}
+
+    .catalog-nav .wrap{gap:1.5rem}
+    .catalog-nav a{padding-block:.75rem}
+
+    /* Pie más corto: columnas de enlaces lado a lado */
+    .footer-grid{grid-template-columns:1fr 1fr;gap:2rem 1.25rem}
+    .footer-brand,.footer-grid>div:last-child{grid-column:1/-1}
+    .footer-logo{height:52px}
+    .footer-bottom{margin-top:2rem}
+}
