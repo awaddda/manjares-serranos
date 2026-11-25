@@ -20,35 +20,8 @@
     window.addEventListener('keydown',function(e){if(e.key==='Escape'&&nav.classList.contains('active')){setMenu(false);toggle.focus()}});
     window.addEventListener('resize',function(){if(window.innerWidth>=900)setMenu(false)});
 
-    /* Parallax de la foto de portada: sube más lento que la tarjeta */
-    var hero=document.querySelector('.hero'),heroImg=hero&&hero.querySelector('.hero-photo img'),heroCopy=hero&&hero.querySelector('.hero-copy');
-    /* Solo con mouse: en pantallas táctiles (sobre todo Safari de iPhone/iPad)
-       el desplazamiento por inercia y el rebote hacían saltar la foto y el texto */
-    var canParallax=window.matchMedia('(hover: hover) and (pointer: fine)').matches&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(heroImg&&canParallax){
-        var heroSticky=true,heroH=0,heroQueued=false;
-        var moveHero=function(){
-            heroQueued=false;
-            /* Nunca negativo: el rebote de Safari arriba de todo da scrollY < 0 */
-            var y=heroSticky?Math.max(0,Math.min(window.scrollY,heroH)):0;
-            heroImg.style.transform='translate3d(0,'+(-y*.3).toFixed(1)+'px,0)';
-            /* El texto va más lento que la foto: da sensación de capas */
-            if(heroCopy)heroCopy.style.transform='translate3d(0,'+(-y*.15).toFixed(1)+'px,0)';
-        };
-        var queueHero=function(){
-            if(heroQueued)return;
-            heroQueued=true;
-            requestAnimationFrame(moveHero);
-        };
-        var measureHero=function(){
-            heroSticky=getComputedStyle(hero).position==='sticky';
-            heroH=hero.offsetHeight;
-            queueHero();
-        };
-        window.addEventListener('scroll',queueHero,{passive:true});
-        window.addEventListener('resize',measureHero);
-        measureHero();
-    }
+    /* El parallax de la portada está en el CSS (animación atada al scroll):
+       lo mueve el navegador directo, sin JavaScript, y no se atrasa en Safari */
 
     /* Hojas: cada sección se frena cuando su final llega al borde inferior
        de la pantalla, así la siguiente se desliza por encima */

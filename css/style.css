@@ -95,6 +95,16 @@ h2 .t{display:block}
 .hero-title span{display:block}
 .hero-foot{margin-top:clamp(1.5rem,2.6vw,2.25rem)}
 .hero-actions{display:flex;flex-wrap:wrap;gap:.625rem}
+/* Parallax de la portada atado al scroll: lo anima el navegador directamente
+   (fluido también en Safari). Donde no hay soporte, la portada queda quieta. */
+@keyframes hero-photo-up{to{transform:translate3d(0,-30svh,0)}}
+@keyframes hero-copy-up{to{transform:translate3d(0,-15svh,0)}}
+@media(prefers-reduced-motion:no-preference){
+    @supports(animation-timeline:scroll()){
+        .hero-photo img{animation:hero-photo-up linear both;animation-timeline:scroll(root);animation-range:0 100svh}
+        .hero-copy{animation:hero-copy-up linear both;animation-timeline:scroll(root);animation-range:0 100svh}
+    }
+}
 
 /* Secciones */
 .section{padding-block:var(--section)}
