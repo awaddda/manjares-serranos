@@ -22,11 +22,15 @@
 
     /* Parallax de la foto de portada: sube más lento que la tarjeta */
     var hero=document.querySelector('.hero'),heroImg=hero&&hero.querySelector('.hero-photo img'),heroCopy=hero&&hero.querySelector('.hero-copy');
-    if(heroImg&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    /* Solo con mouse: en pantallas táctiles (sobre todo Safari de iPhone/iPad)
+       el desplazamiento por inercia y el rebote hacían saltar la foto y el texto */
+    var canParallax=window.matchMedia('(hover: hover) and (pointer: fine)').matches&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(heroImg&&canParallax){
         var heroSticky=true,heroH=0,heroQueued=false;
         var moveHero=function(){
             heroQueued=false;
-            var y=heroSticky?Math.min(window.scrollY,heroH):0;
+            /* Nunca negativo: el rebote de Safari arriba de todo da scrollY < 0 */
+            var y=heroSticky?Math.max(0,Math.min(window.scrollY,heroH)):0;
             heroImg.style.transform='translate3d(0,'+(-y*.3).toFixed(1)+'px,0)';
             /* El texto va más lento que la foto: da sensación de capas */
             if(heroCopy)heroCopy.style.transform='translate3d(0,'+(-y*.15).toFixed(1)+'px,0)';
@@ -59,10 +63,18 @@
             hold.setAttribute('aria-hidden','true');
             s.parentNode.insertBefore(hold,s.nextSibling);
         });
+        /* En pantallas táctiles la barra de direcciones de Safari cambia el alto
+           al hacer scroll; si recalculamos ahí, las hojas pegan un salto. */
+        var touch=window.matchMedia('(pointer: coarse)').matches;
+        var lastW=window.innerWidth,baseH=window.innerHeight;
         var placeStacks=function(){
-            stacks.forEach(function(s){s.style.top=Math.min(0,window.innerHeight-s.offsetHeight)+'px'});
+            stacks.forEach(function(s){s.style.top=Math.min(0,baseH-s.offsetHeight)+'px'});
         };
-        window.addEventListener('resize',placeStacks);
+        window.addEventListener('resize',function(){
+            if(touch&&window.innerWidth===lastW)return;
+            lastW=window.innerWidth;baseH=window.innerHeight;
+            placeStacks();
+        });
         window.addEventListener('load',placeStacks);
         if('ResizeObserver' in window){var ro=new ResizeObserver(placeStacks);stacks.forEach(function(s){ro.observe(s)})}
         placeStacks();
