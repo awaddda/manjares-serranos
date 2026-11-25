@@ -335,3 +335,20 @@ h2 .t{display:block}
     .footer-logo{height:52px}
     .footer-bottom{margin-top:2rem}
 }
+
+/* Portada en celular: la foto es apaisada y en pantalla vertical se recortaba
+   casi toda. Ocupa la parte de arriba más ancha y el texto va abajo. */
+@media(max-width:767px) and (orientation:portrait){
+    .hero{justify-content:flex-end}
+    .hero-photo img{inset:0 0 auto;height:64svh;object-position:50% 55%}
+    .hero-photo::after{background:linear-gradient(180deg,rgba(0,0,0,.65) 0,rgba(0,0,0,0) 110px),linear-gradient(180deg,rgba(0,0,0,0) 42svh,#000 64svh)}
+    .hero-copy{padding-bottom:calc(var(--peek) + 2rem)}
+    @keyframes hero-photo-up-sm{to{transform:translate3d(0,-12svh,0)}}
+    @keyframes hero-copy-up-sm{to{transform:translate3d(0,-6svh,0)}}
+    @media(prefers-reduced-motion:no-preference){
+        @supports(animation-timeline:scroll()){
+            .hero-photo img{animation-name:hero-photo-up-sm}
+            .hero-copy{animation-name:hero-copy-up-sm}
+        }
+    }
+}
