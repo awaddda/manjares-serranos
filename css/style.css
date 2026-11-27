@@ -85,10 +85,10 @@ h2 .t{display:block}
 .hero{position:sticky;top:0;isolation:isolate;display:flex;flex-direction:column;justify-content:center;height:100vh;height:100svh;min-height:30rem;background:var(--black)}
 @media(max-height:480px){.hero{position:relative}}
 .hero-photo{position:absolute;inset:0;z-index:-1;overflow:hidden}
-.hero-photo img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:58% top;will-change:transform}
+.hero-photo img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:58% top}
 .hero-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.72) 0,rgba(0,0,0,0) 150px),radial-gradient(ellipse 62% 55% at 26% 54%,rgba(0,0,0,.72) 0,rgba(0,0,0,.35) 60%,rgba(0,0,0,0) 100%),linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.85) 100%)}
 @media(max-width:767px){.hero-photo::after{background:linear-gradient(180deg,rgba(0,0,0,.72) 0,rgba(0,0,0,0) 120px),radial-gradient(ellipse 110% 42% at 30% 50%,rgba(0,0,0,.72) 0,rgba(0,0,0,.35) 65%,rgba(0,0,0,0) 100%),linear-gradient(180deg,rgba(0,0,0,0) 48%,rgba(0,0,0,.9) 100%)}}
-.hero-copy{flex:none;padding-block:calc(var(--header) + 1rem) calc(var(--peek) + 1.5rem);will-change:transform}
+.hero-copy{flex:none;padding-block:calc(var(--header) + 1rem) calc(var(--peek) + 1.5rem)}
 /* Todo lo que sigue a la portada sube por encima como una tarjeta */
 .sheet{position:relative;z-index:2;margin-top:calc(var(--peek) * -1);border-radius:1.5rem 1.5rem 0 0;background:var(--black)}
 .hero-title{font-size:clamp(1.6rem,8vw,2.75rem);line-height:1;letter-spacing:-.03em;text-shadow:0 2px 28px rgba(0,0,0,.55)}
@@ -96,6 +96,16 @@ h2 .t{display:block}
 .hero-title span{display:block}
 .hero-foot{margin-top:clamp(1.5rem,2.6vw,2.25rem)}
 .hero-actions{display:flex;flex-wrap:wrap;gap:.625rem}
+/* Parallax de la portada atado al scroll: lo anima el navegador directamente
+   (fluido también en Safari). Donde no hay soporte, la portada queda quieta. */
+@keyframes hero-photo-up{to{transform:translate3d(0,-30svh,0)}}
+@keyframes hero-copy-up{to{transform:translate3d(0,-15svh,0)}}
+@media(prefers-reduced-motion:no-preference){
+    @supports(animation-timeline:scroll()){
+        .hero-photo img{animation:hero-photo-up linear both;animation-timeline:scroll(root);animation-range:0 100svh}
+        .hero-copy{animation:hero-copy-up linear both;animation-timeline:scroll(root);animation-range:0 100svh}
+    }
+}
 
 /* Secciones */
 .section{padding-block:var(--section)}
@@ -316,3 +326,14 @@ html:has(.detail[open]){overflow:hidden}
 .data-fiscal img{width:60px;height:auto;border-radius:4px}
 /* Tarjetas angostas (celular): la línea de presentación entra en un renglón */
 @container (max-width:200px){.product-name .v{font-size:.8125rem;white-space:nowrap}}
+
+/* Portada en celular: la foto es apaisada y a pantalla completa se recortaba
+   casi toda. Ocupa el 80% de arriba (se ven más productos), se funde a negro
+   abajo y el texto queda sobre la parte baja de la foto. */
+@media(max-width:767px) and (orientation:portrait){
+    .hero{justify-content:flex-end}
+    .hero-photo img{inset:0 0 auto;height:80svh;object-position:50% 60%}
+    .hero-photo::after{background:linear-gradient(180deg,rgba(0,0,0,.65) 0,rgba(0,0,0,0) 110px),linear-gradient(180deg,rgba(0,0,0,0) 38svh,rgba(0,0,0,.55) 58svh,rgba(0,0,0,.85) 72svh,#000 80svh)}
+    .hero-copy{padding-bottom:calc(var(--peek) + 1.75rem)}
+    .hero-actions .btn{flex:1 1 100%}
+}
